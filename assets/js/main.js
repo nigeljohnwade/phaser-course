@@ -28,6 +28,7 @@ function preload() {
     this.load.audio('goldSound', ['assets/audio/Pickup.wav']);
 }
 
+
 function create() {
     var goldPickupAudio = this.sound.add('goldSound', {loop: false});
     // button with origin set to top left of image
