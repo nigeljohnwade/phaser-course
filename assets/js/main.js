@@ -5,6 +5,7 @@ var config = {
     scene: {
         preload: preload,
         create: create,
+        update: update,
     },
     physics: {
         default: 'arcade',
@@ -23,6 +24,7 @@ function preload() {
     this.load.image('button1', 'assets/images/ui/blue_button01.png');
     // loads an image and specifies each sprites frame dimensions
     this.load.spritesheet('items', 'assets/images/items.png', {frameWidth: 32, frameHeight: 32});
+    this.load.spritesheet('characters', 'assets/images/characters.png', {frameWidth: 32, frameHeight: 32});
 }
 
 function create() {
@@ -42,4 +44,28 @@ function create() {
     var chest = this.add.image(500, 400, 'items', 4);
 
     this.physics.add.image(500, 100, 'button1');
+    this.player = this.physics.add.image(500, 44, 'characters', 0);
+    this.player.setScale(2);
+
+    this.cursors = this.input.keyboard.createCursorKeys();
+}
+
+function update() {
+    this.player.setVelocity(0);
+
+    if (this.cursors.left.isDown) {
+        this.player.setVelocityX(-160);
+    } else if (this.cursors.right.isDown) {
+        this.player.setVelocityX(160);
+    } else {
+
+    }
+
+    if (this.cursors.up.isDown) {
+        this.player.setVelocityY(-160);
+    } else if (this.cursors.down.isDown) {
+        this.player.setVelocityY(160);
+    } else {
+
+    }
 }
