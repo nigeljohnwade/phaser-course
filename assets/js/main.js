@@ -12,7 +12,7 @@ var config = {
         arcade: {
             debug: true,
             gravity: {
-                y: 5,
+                y: 0,
             },
         },
     },
@@ -35,17 +35,21 @@ function create() {
     // sprite has an animation component attached
     var sprite = this.add.sprite(300, 200, 'button1');
     sprite.setOrigin(0.5, 0.5);
-    // loads frames from the spritesheet as images by specifying frame number
-    // these will not have an animation component attached
-    var chest = this.add.image(100, 400, 'items');
-    var chest = this.add.image(200, 400, 'items', 1);
-    var chest = this.add.image(300, 400, 'items', 2);
-    var chest = this.add.image(400, 400, 'items', 3);
-    var chest = this.add.image(500, 400, 'items', 4);
+    // create a reference to chest which is added to with physics attached
+    this.chest = this.physics.add.image(100, 400, 'items', 0);
 
-    this.physics.add.image(500, 100, 'button1');
+    // create a reference to an item with physics attached
+    this.wall = this.physics.add.image(500, 100, 'button1');
+    // Make the instance solid
+    this.wall.setImmovable();
+
     this.player = this.physics.add.image(500, 44, 'characters', 0);
     this.player.setScale(2);
+    // prevent the player going out of the scene
+    this.player.body.setCollideWorldBounds(true);
+    // set up a physics collider between the wall and the player
+    this.physics.add.collider(this.player, this.wall);
+    this.physics.add.overlap(this.player, this.chest, function(){console.log('overlap')});
 
     this.cursors = this.input.keyboard.createCursorKeys();
 }
