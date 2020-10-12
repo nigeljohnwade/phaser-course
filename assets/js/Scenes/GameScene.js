@@ -20,10 +20,8 @@ class GameScene extends Phaser.Scene{
         // Make the instance solid
         this.wall.setImmovable();
 
-        this.player = this.physics.add.image(500, 44, 'characters', 0);
-        this.player.setScale(2);
-        // prevent the player going out of the scene
-        this.player.body.setCollideWorldBounds(true);
+        this.player = new Player(this, 500, 44, 'characters', 0);
+
         // set up a physics collider between the wall and the player
         this.physics.add.collider(this.player, this.wall);
         // when the player overlaps the chest play a sound and destroy the chest
@@ -36,22 +34,6 @@ class GameScene extends Phaser.Scene{
     }
 
     update() {
-        this.player.setVelocity(0);
-
-        if (this.cursors.left.isDown) {
-            this.player.setVelocityX(-160);
-        } else if (this.cursors.right.isDown) {
-            this.player.setVelocityX(160);
-        } else {
-
-        }
-
-        if (this.cursors.up.isDown) {
-            this.player.setVelocityY(-160);
-        } else if (this.cursors.down.isDown) {
-            this.player.setVelocityY(160);
-        } else {
-
-        }
+        this.player.update (this.cursors);
     }
 }
