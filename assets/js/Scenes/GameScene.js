@@ -13,7 +13,7 @@ class GameScene extends Phaser.Scene{
         var sprite = this.add.sprite(300, 200, 'button1');
         sprite.setOrigin(0.5, 0.5);
         // create a reference to chest which is added to with physics attached
-        this.chest = this.physics.add.image(100, 400, 'items', 0);
+        this.chest = new Chest(this,100, 400, 'items', 0);
 
         // create a reference to an item with physics attached
         this.wall = this.physics.add.image(500, 100, 'button1');

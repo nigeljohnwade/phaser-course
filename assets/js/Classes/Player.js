@@ -24,7 +24,7 @@ class Player extends Phaser.Physics.Arcade.Image {
         } else if (cursors.right.isDown) {
             this.body.setVelocityX(this.velocity);
         } else {
-
+            this.body.setVelocityX(0);
         }
 
         if (cursors.up.isDown) {
@@ -32,7 +32,7 @@ class Player extends Phaser.Physics.Arcade.Image {
         } else if (cursors.down.isDown) {
             this.body.setVelocityY(this.velocity);
         } else {
-
+            this.body.setVelocityY(0);
         }
     }
 }
