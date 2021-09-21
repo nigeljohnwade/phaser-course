@@ -2,7 +2,7 @@ class Player extends Phaser.Physics.Arcade.Image {
     constructor(scene, x, y, key, frame) {
         super(scene, x, y, key, frame);
         this.scene = scene;
-        this.velocity = 160
+        this.velocity = 160;
 
         // enable physics
         this.scene.physics.world.enable(this);
@@ -18,7 +18,6 @@ class Player extends Phaser.Physics.Arcade.Image {
 
     update(cursors) {
         this.body.setVelocity(0);
-
         if (cursors.left.isDown) {
             this.body.setVelocityX(-this.velocity);
         } else if (cursors.right.isDown) {

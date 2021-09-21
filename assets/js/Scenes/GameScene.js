@@ -5,13 +5,7 @@ class GameScene extends Phaser.Scene{
 
     create() {
         var goldPickupAudio = this.sound.add('goldSound', {loop: false});
-        // button with origin set to top left of image
-        var button = this.add.image(100, 100, 'button1');
-        button.setOrigin(0, 0);
-        // sprite with origin set to center which would be default
-        // sprite has an animation component attached
-        var sprite = this.add.sprite(300, 200, 'button1');
-        sprite.setOrigin(0.5, 0.5);
+
         // create a reference to chest which is added to with physics attached
         this.chest = new Chest(this,100, 400, 'items', 0);
 
@@ -34,6 +28,6 @@ class GameScene extends Phaser.Scene{
     }
 
     update() {
-        this.player.update (this.cursors);
+        this.player.update(this.cursors);
     }
 }
