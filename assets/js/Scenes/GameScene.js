@@ -10,7 +10,6 @@ class GameScene extends Phaser.Scene{
     create() {
         var goldPickupAudio = this.sound.add('goldSound', {loop: false});
 
-
         // create a reference to chest which is added to with physics attached
         this.chest1 = new Chest(this, this.randomCoords(800), this.randomCoords(600), 'items', 0);
         this.chest2 = new Chest(this, this.randomCoords(800), this.randomCoords(600), 'items', 0);
