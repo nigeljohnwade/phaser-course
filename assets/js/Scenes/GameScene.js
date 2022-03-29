@@ -3,6 +3,9 @@ class GameScene extends Phaser.Scene{
         super('Game');
     }
 
+    init(){
+        this.scene.launch('Ui');
+    }
     randomCoords(max) {
         return Math.round(Math.random() * max);
     }
