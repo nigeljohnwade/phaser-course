@@ -1,11 +1,17 @@
 class UiScene extends Phaser.Scene{
     constructor() {
         super('Ui');
+        this.score = 0;
+    }
+
+    init(){
+        this.gameScene = this.scene.get('Game')
     }
 
     create() {
         this.setUpUiElements();
         this.setUpEvents();
+
     }
 
     setUpUiElements(){
@@ -14,6 +20,9 @@ class UiScene extends Phaser.Scene{
     }
 
     setUpEvents(){
-
+        this.gameScene.events.on('updateScore', (score) => {
+            this.score = this.score + score;
+            this.scoreText.setText(`Coins: ${this.score}`)
+        })
     }
 }
