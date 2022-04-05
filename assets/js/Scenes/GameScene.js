@@ -1,9 +1,9 @@
-class GameScene extends Phaser.Scene{
+class GameScene extends Phaser.Scene {
     constructor() {
         super('Game');
     }
 
-    init(){
+    init() {
         this.scene.launch('Ui');
     }
 
@@ -13,22 +13,24 @@ class GameScene extends Phaser.Scene{
 
     create() {
         this.createAudio();
-
         this.createChests();
         this.createWalls();
         this.createPlayer();
-        this.createPhysics();
+        this.createCollisions();
         this.createInput();
+    }
+
+    update() {
+        this.player.update(this.cursors);
     }
 
     createInput() {
         this.cursors = this.input.keyboard.createCursorKeys();
     }
 
-    createPhysics() {
+    createCollisions() {
         this.physics.add.collider(this.player, this.wall);
-        this.physics.add.overlap(this.player, this.chest1, this.collectChest, null, this);
-        this.physics.add.overlap(this.player, this.chest2, this.collectChest, null, this);
+        this.physics.add.overlap(this.player, this.chests, this.collectChest, null, this);
     }
 
     createPlayer() {
@@ -41,22 +43,34 @@ class GameScene extends Phaser.Scene{
     }
 
     createChests() {
-        this.chest1 = new Chest(this, this.randomCoords(800), this.randomCoords(600), 'items', 0);
-        this.chest2 = new Chest(this, this.randomCoords(800), this.randomCoords(600), 'items', 0);
+        this.chests = this.physics.add.group();
+        this.maxNumberOfChests = 3;
+        for (let i = 0; i < this.maxNumberOfChests; i++) {
+            this.spawnChest();
+        }
+    }
+
+    spawnChest() {
+        let chest = this.chests.getFirstDead();
+        console.log(chest);
+        if (!chest) {
+            const chest = new Chest(this, this.randomCoords(800), this.randomCoords(600), 'items', 0);
+            this.chests.add(chest);
+        } else {
+            chest.setPosition( this.randomCoords(800), this.randomCoords(600));
+            chest.makeActive();
+        }
     }
 
     createAudio() {
         this.goldPickupAudio = this.sound.add('goldSound', {loop: false});
     }
 
-    update() {
-        this.player.update(this.cursors);
-    }
-
-    collectChest(player, chest){
+    collectChest(player, chest) {
         this.goldPickupAudio.play();
-        this.events.emit('updateScore', chest.coins)
-        chest.destroy();
+        this.events.emit('updateScore', chest.coins);
+        chest.makeInactive();
+        this.time.delayedCall(1000, this.spawnChest, [], this);
     }
 
 }
