@@ -12,9 +12,9 @@ class GameScene extends Phaser.Scene {
     }
 
     create() {
+        this.createMap();
         this.createAudio();
         this.createChests();
-        this.createWalls();
         this.createPlayer();
         this.createCollisions();
         this.createInput();
@@ -22,6 +22,15 @@ class GameScene extends Phaser.Scene {
 
     update() {
         this.player.update(this.cursors);
+    }
+
+    createMap(){
+        this.map = this.make.tilemap({key: 'map'});
+        this.tiles = this.map.addTilesetImage('background', 'background', 32, 32, 1, 2 );
+        this.backgroundLayer = this.map.createStaticLayer('background', this.tiles, 0, 0);
+        this.blockedLayer = this.map.createStaticLayer('blocked', this.tiles, 0, 0);
+        this.backgroundLayer.setScale(2);
+        this.blockedLayer.setScale(2);
     }
 
     createInput() {
@@ -35,11 +44,6 @@ class GameScene extends Phaser.Scene {
 
     createPlayer() {
         this.player = new Player(this, 500, 44, 'characters', 0);
-    }
-
-    createWalls() {
-        this.wall = this.physics.add.image(500, 100, 'button1');
-        this.wall.setImmovable();
     }
 
     createChests() {
