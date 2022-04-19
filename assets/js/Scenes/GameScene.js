@@ -25,12 +25,7 @@ class GameScene extends Phaser.Scene {
     }
 
     createMap(){
-        this.map = this.make.tilemap({key: 'map'});
-        this.tiles = this.map.addTilesetImage('background', 'background', 32, 32, 1, 2 );
-        this.backgroundLayer = this.map.createStaticLayer('background', this.tiles, 0, 0);
-        this.blockedLayer = this.map.createStaticLayer('blocked', this.tiles, 0, 0);
-        this.backgroundLayer.setScale(2);
-        this.blockedLayer.setScale(2);
+        this.map = new Map(this, 'map', 'background', 'background', 'blocked');
     }
 
     createInput() {
@@ -38,12 +33,12 @@ class GameScene extends Phaser.Scene {
     }
 
     createCollisions() {
-        this.physics.add.collider(this.player, this.wall);
+        this.physics.add.collider(this.player, this.map.blockedLayer);
         this.physics.add.overlap(this.player, this.chests, this.collectChest, null, this);
     }
 
     createPlayer() {
-        this.player = new Player(this, 500, 44, 'characters', 0);
+        this.player = new Player(this, 224, 224, 'characters', 0);
     }
 
     createChests() {
@@ -56,7 +51,6 @@ class GameScene extends Phaser.Scene {
 
     spawnChest() {
         let chest = this.chests.getFirstDead();
-        console.log(chest);
         if (!chest) {
             const chest = new Chest(this, this.randomCoords(800), this.randomCoords(600), 'items', 0);
             this.chests.add(chest);
