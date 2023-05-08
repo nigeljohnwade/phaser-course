@@ -5,31 +5,59 @@ class GameScene extends Phaser.Scene {
 
     init() {
         this.scene.launch('Ui');
-    }
-
-    randomCoords(max) {
-        return Math.round(Math.random() * max);
+        this.score = 0;
     }
 
     create() {
         this.createMap();
         this.createAudio();
         this.createChests();
-        this.createPlayer();
-        this.createCollisions();
         this.createInput();
         this.createGameManager();
     }
 
     update() {
-        this.player.update(this.cursors);
+        this.player && this.player.update(this.cursors);
     }
 
-    createMap(){
+    createAudio() {
+        this.goldPickupAudio = this.sound.add('goldSound', {loop: false});
+    }
+
+    createPlayer(location) {
+        this.player = new Player(this, location[0] * 2, location[1] * 2, 'characters', 0);
+    }
+
+    createChests() {
+        this.chests = this.physics.add.group();
+        this.chestPositions = [[100, 100], [200, 200], [300, 300], [400, 400], [500, 500]];
+        this.maxNumberOfChests = 3;
+        for (let i = 0; i < this.maxNumberOfChests; i++) {
+            this.spawnChest();
+        }
+    }
+
+    spawnChest() {
+        const location = this.chestPositions[Math.floor(Math.random() * this.chestPositions.length)];
+        let chest = this.chests.getFirstDead();
+        if (!chest) {
+            const chest = new Chest(this, location[0], location[1], 'items', 0);
+            this.chests.add(chest);
+        } else {
+            chest.setPosition(location[0], location[1]);
+            chest.makeActive();
+        }
+    }
+
+    createMap() {
         this.map = new Map(this, 'map', 'background', 'background', 'blocked');
     }
 
     createGameManager() {
+        this.events.on('spawnPlayer', location => {
+            this.createPlayer(location);
+            this.createCollisions();
+        });
         this.gameManager = new GameManager(this, this.map.map.objects);
         this.gameManager.setup();
     }
@@ -43,32 +71,9 @@ class GameScene extends Phaser.Scene {
         this.physics.add.overlap(this.player, this.chests, this.collectChest, null, this);
     }
 
-    createPlayer() {
-        this.player = new Player(this, 224, 224, 'characters', 0);
-    }
 
-    createChests() {
-        this.chests = this.physics.add.group();
-        this.maxNumberOfChests = 3;
-        for (let i = 0; i < this.maxNumberOfChests; i++) {
-            this.spawnChest();
-        }
-    }
 
-    spawnChest() {
-        let chest = this.chests.getFirstDead();
-        if (!chest) {
-            const chest = new Chest(this, this.randomCoords(800), this.randomCoords(600), 'items', 0);
-            this.chests.add(chest);
-        } else {
-            chest.setPosition( this.randomCoords(800), this.randomCoords(600));
-            chest.makeActive();
-        }
-    }
 
-    createAudio() {
-        this.goldPickupAudio = this.sound.add('goldSound', {loop: false});
-    }
 
     collectChest(player, chest) {
         this.goldPickupAudio.play();
